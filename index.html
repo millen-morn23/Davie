@@ -15,8 +15,6 @@
       --roast-light: #E8622A;
       --roast-dark: #8B2A0D;
       --barista-purple: #7B3F8C;
-      --barista-light: #A05CB0;
-      --barista-dark: #4A1F5A;
       --cream: #FAF6F0;
       --off-white: #F5EDE0;
       --charcoal: #1A1A1A;
@@ -33,34 +31,89 @@
       overflow-x: hidden;
     }
 
-    /* ── NAV ── */
+    /* ═══════════════════════════════
+       NAV
+    ═══════════════════════════════ */
     .nav {
-      position: sticky; top: 0; z-index: 100;
-      background: rgba(26,26,26,0.97);
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(26,26,26,0.98);
       border-bottom: 1px solid rgba(200,64,26,0.3);
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 2.5rem; height: 56px;
+      padding: 0 2rem; height: 56px;
     }
     .nav-logo {
       font-family: 'Playfair Display', serif;
       font-size: 18px; font-weight: 700;
       color: var(--roast-light); letter-spacing: 0.02em;
+      z-index: 201;
     }
-    .nav-links { display: flex; }
+
+    /* Desktop nav links */
+    .nav-links {
+      display: flex; align-items: center; gap: 0;
+    }
     .nav-btn {
       background: none; border: none;
       color: rgba(250,246,240,0.45);
       font-family: 'DM Sans', sans-serif;
       font-size: 11px; font-weight: 500;
       letter-spacing: 0.08em; text-transform: uppercase;
-      padding: 8px 14px; cursor: pointer;
+      padding: 8px 13px; cursor: pointer;
       transition: color 0.2s;
       border-bottom: 2px solid transparent;
     }
     .nav-btn:hover { color: var(--cream); }
     .nav-btn.active { color: var(--roast-light); border-bottom-color: var(--roast-orange); }
 
-    /* ── PAGES ── */
+    /* Hamburger button */
+    .hamburger {
+      display: none;
+      flex-direction: column; justify-content: center; align-items: center;
+      gap: 5px; width: 40px; height: 40px;
+      background: none; border: none; cursor: pointer; z-index: 201;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--cream); border-radius: 2px;
+      transition: all 0.3s ease;
+      transform-origin: center;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Mobile drawer */
+    .mobile-menu {
+      display: none;
+      position: fixed; top: 56px; left: 0; right: 0; bottom: 0;
+      background: rgba(26,26,26,0.99);
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 0; z-index: 199;
+      transform: translateY(-100%);
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    .mobile-menu.open {
+      transform: translateY(0);
+    }
+    .mobile-nav-btn {
+      background: none; border: none;
+      color: rgba(250,246,240,0.6);
+      font-family: 'Playfair Display', serif;
+      font-size: 28px; font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 18px 40px; cursor: pointer;
+      transition: color 0.2s;
+      width: 100%; text-align: center;
+      border-bottom: 1px solid rgba(250,246,240,0.06);
+    }
+    .mobile-nav-btn:hover,
+    .mobile-nav-btn.active { color: var(--roast-light); }
+    .mobile-nav-btn:last-child { border-bottom: none; }
+
+    /* ═══════════════════════════════
+       PAGES
+    ═══════════════════════════════ */
     .page { display: none; animation: fadeIn 0.35s ease; }
     .page.active { display: block; }
     @keyframes fadeIn {
@@ -68,9 +121,30 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── HERO ── */
-    .hero { min-height: calc(100vh - 56px); display: grid; grid-template-columns: 1fr 1fr; }
+    /* ═══════════════════════════════
+       PAGE HEADER (shared)
+    ═══════════════════════════════ */
+    .page-header {
+      display: flex; align-items: baseline; gap: 1.5rem;
+      margin-bottom: 3rem; padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(26,26,26,0.12);
+      flex-wrap: wrap;
+    }
+    .page-title { font-family: 'Playfair Display', serif; font-size: 38px; font-weight: 700; }
+    .page-accent {
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--roast-orange);
+      border-left: 2px solid var(--roast-orange); padding-left: 8px;
+    }
 
+    /* ═══════════════════════════════
+       HERO
+    ═══════════════════════════════ */
+    .hero {
+      min-height: calc(100vh - 56px);
+      display: grid; grid-template-columns: 1fr 1fr;
+    }
     .hero-left {
       background: var(--roast-orange);
       padding: 5rem 3.5rem;
@@ -79,24 +153,21 @@
     }
     .hero-left::before {
       content: ''; position: absolute;
-      top: -70px; right: -70px;
-      width: 260px; height: 260px;
+      top: -70px; right: -70px; width: 260px; height: 260px;
       border-radius: 50%; background: rgba(255,255,255,0.07);
     }
     .hero-left::after {
       content: ''; position: absolute;
-      bottom: 40px; left: -40px;
-      width: 180px; height: 180px;
+      bottom: 40px; left: -40px; width: 180px; height: 180px;
       border-radius: 50%; background: rgba(0,0,0,0.1);
     }
     .hero-eyebrow {
-      font-size: 11px; font-weight: 500;
-      letter-spacing: 0.2em; text-transform: uppercase;
-      color: rgba(255,255,255,0.7); margin-bottom: 1rem;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.2em;
+      text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 1rem;
     }
     .hero-name {
       font-family: 'Playfair Display', serif;
-      font-size: 56px; font-weight: 900; line-height: 1.05;
+      font-size: 52px; font-weight: 900; line-height: 1.05;
       color: #fff; margin-bottom: 1.5rem;
     }
     .hero-title {
@@ -139,7 +210,7 @@
     }
     .stat-num {
       font-family: 'Playfair Display', serif;
-      font-size: 36px; font-weight: 700;
+      font-size: 34px; font-weight: 700;
       color: var(--roast-light); line-height: 1; margin-bottom: 4px;
     }
     .stat-label {
@@ -151,21 +222,9 @@
       border-left: 2px solid var(--barista-purple); padding-left: 1rem;
     }
 
-    /* ── PAGE HEADER ── */
-    .page-header {
-      display: flex; align-items: baseline; gap: 1.5rem;
-      margin-bottom: 3rem; padding-bottom: 1.5rem;
-      border-bottom: 1px solid rgba(26,26,26,0.12);
-    }
-    .page-title { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 700; }
-    .page-accent {
-      font-size: 11px; font-weight: 500;
-      letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--roast-orange);
-      border-left: 2px solid var(--roast-orange); padding-left: 8px;
-    }
-
-    /* ── EXPERIENCE ── */
+    /* ═══════════════════════════════
+       EXPERIENCE
+    ═══════════════════════════════ */
     .exp-page {
       background: var(--cream); color: var(--charcoal);
       padding: 5rem 3.5rem; min-height: calc(100vh - 56px);
@@ -178,25 +237,24 @@
     }
     .exp-item {
       display: grid; grid-template-columns: 40px 1fr;
-      gap: 1.5rem; margin-bottom: 2.5rem; position: relative;
+      gap: 1.5rem; margin-bottom: 2.5rem;
     }
     .exp-dot {
       width: 14px; height: 14px; border-radius: 50%;
-      background: var(--roast-orange);
-      border: 3px solid var(--cream);
-      margin-top: 6px; justify-self: center;
-      position: relative; z-index: 1;
+      background: var(--roast-orange); border: 3px solid var(--cream);
+      margin-top: 6px; justify-self: center; position: relative; z-index: 1;
     }
     .exp-dot.purple { background: var(--barista-purple); }
     .exp-card {
-      background: #fff;
-      border: 1px solid rgba(26,26,26,0.08);
-      border-top: 3px solid var(--roast-orange);
-      padding: 1.5rem;
+      background: #fff; border: 1px solid rgba(26,26,26,0.08);
+      border-top: 3px solid var(--roast-orange); padding: 1.5rem;
     }
     .exp-card.purple { border-top-color: var(--barista-purple); }
-    .exp-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
-    .exp-role { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; }
+    .exp-top {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; margin-bottom: 6px; flex-wrap: wrap; gap: 4px;
+    }
+    .exp-role { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; }
     .exp-date { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
     .exp-company { font-size: 13px; color: var(--roast-orange); font-weight: 500; margin-bottom: 12px; }
     .exp-company.purple { color: var(--barista-purple); }
@@ -207,7 +265,9 @@
     }
     .exp-duties li::before { content: '—'; position: absolute; left: 0; color: var(--text-muted); }
 
-    /* ── SKILLS ── */
+    /* ═══════════════════════════════
+       SKILLS
+    ═══════════════════════════════ */
     .skills-page {
       background: var(--charcoal); color: var(--cream);
       padding: 5rem 3.5rem; min-height: calc(100vh - 56px);
@@ -228,7 +288,9 @@
     .skill-tag:hover { background: var(--roast-orange); border-color: var(--roast-orange); color: #fff; }
     .skill-tag.purple:hover { background: var(--barista-purple); border-color: var(--barista-purple); color: #fff; }
 
-    /* ── CERTS ── */
+    /* ═══════════════════════════════
+       CERTIFICATIONS
+    ═══════════════════════════════ */
     .certs-page {
       background: var(--off-white); color: var(--charcoal);
       padding: 5rem 3.5rem; min-height: calc(100vh - 56px);
@@ -236,31 +298,25 @@
     .certs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem; }
 
     .cert-card {
-      background: #fff;
-      border: 1px solid rgba(26,26,26,0.08);
+      background: #fff; border: 1px solid rgba(26,26,26,0.08);
       border-top: 4px solid var(--roast-orange);
       padding: 2rem 1.5rem; text-align: center;
       position: relative; overflow: visible;
-      transition: transform 0.2s, box-shadow 0.2s;
-      cursor: default;
+      transition: transform 0.2s, box-shadow 0.2s; cursor: default;
     }
     .cert-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,0.12); }
     .cert-card.purple { border-top-color: var(--barista-purple); }
 
-    /* Hover preview */
     .cert-preview {
       display: none; position: absolute;
       bottom: calc(100% + 14px); left: 50%; transform: translateX(-50%);
-      width: 300px; background: #fff;
+      width: 290px; background: #fff;
       border: 1px solid rgba(26,26,26,0.14);
       box-shadow: 0 16px 48px rgba(0,0,0,0.2);
       z-index: 300; text-align: left;
     }
     .cert-card:hover .cert-preview { display: block; }
-    .cert-preview-inner {
-      border-top: 5px solid var(--roast-orange);
-      padding: 1.25rem;
-    }
+    .cert-preview-inner { border-top: 5px solid var(--roast-orange); padding: 1.25rem; }
     .cert-preview-inner.purple { border-top-color: var(--barista-purple); }
     .cert-preview-logo {
       font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
@@ -268,15 +324,12 @@
     }
     .cert-preview-sca-title {
       font-family: 'Playfair Display', serif;
-      font-size: 22px; font-weight: 900; line-height: 1.2;
+      font-size: 20px; font-weight: 900; line-height: 1.2;
       color: var(--charcoal); margin-bottom: 8px;
     }
     .cert-preview-sub { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; }
     .cert-preview-name { font-size: 14px; font-weight: 500; color: var(--charcoal); margin-bottom: 4px; }
-    .cert-preview-course {
-      font-size: 13px; color: var(--roast-orange);
-      font-weight: 500; margin-bottom: 12px;
-    }
+    .cert-preview-course { font-size: 13px; color: var(--roast-orange); font-weight: 500; margin-bottom: 12px; }
     .cert-preview-course.purple { color: var(--barista-purple); }
     .cert-preview-footer {
       display: flex; justify-content: space-between;
@@ -292,13 +345,15 @@
       font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700;
     }
     .cert-badge.purple { background: rgba(123,63,140,0.1); color: var(--barista-purple); }
-    .cert-name { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .cert-name { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; margin-bottom: 6px; }
     .cert-org { font-size: 11px; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
     .cert-num { font-size: 11px; color: var(--roast-orange); font-family: monospace; }
     .cert-num.purple { color: var(--barista-purple); }
     .cert-date { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
 
-    /* ── VISION ── */
+    /* ═══════════════════════════════
+       VISION
+    ═══════════════════════════════ */
     .vision-page { min-height: calc(100vh - 56px); display: grid; grid-template-columns: 1fr 1fr; }
     .vision-left {
       background: var(--barista-purple);
@@ -308,44 +363,43 @@
     }
     .vision-left::before {
       content: ''; position: absolute;
-      bottom: -90px; right: -90px;
-      width: 340px; height: 340px;
+      bottom: -90px; right: -90px; width: 340px; height: 340px;
       border-radius: 50%; background: rgba(255,255,255,0.06);
     }
     .vision-quote {
       font-family: 'Playfair Display', serif;
-      font-size: 28px; font-weight: 700;
+      font-size: 26px; font-weight: 700;
       color: #fff; line-height: 1.4;
       margin-bottom: 2rem; padding-top: 1.5rem; position: relative;
     }
     .vision-quote::before {
-      content: '"'; font-size: 90px;
-      color: rgba(255,255,255,0.14);
+      content: '"'; font-size: 90px; color: rgba(255,255,255,0.14);
       position: absolute; top: -24px; left: -8px;
       font-family: 'Playfair Display', serif; line-height: 1;
     }
-    .vision-body { font-size: 14px; color: rgba(255,255,255,0.75); line-height: 1.85; }
+    .vision-body { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.85; }
     .vision-right {
       background: var(--charcoal);
       padding: 5rem 3.5rem;
       display: flex; flex-direction: column; justify-content: center; gap: 1.5rem;
     }
-    .vision-right-title { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--cream); margin-bottom: 0.5rem; }
+    .vision-right-title { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--cream); margin-bottom: 0.5rem; }
     .vision-item {
       display: flex; gap: 1.25rem; align-items: flex-start;
       padding: 1.25rem;
-      border: 1px solid rgba(123,63,140,0.25);
-      border-left: 3px solid var(--barista-purple);
+      border: 1px solid rgba(123,63,140,0.25); border-left: 3px solid var(--barista-purple);
     }
     .vision-num {
       font-family: 'Playfair Display', serif;
-      font-size: 28px; font-weight: 700;
+      font-size: 26px; font-weight: 700;
       color: var(--barista-purple); line-height: 1; min-width: 30px;
     }
     .vision-text { font-size: 13px; color: rgba(250,246,240,0.7); line-height: 1.75; }
     .vision-text strong { color: var(--cream); font-weight: 500; display: block; margin-bottom: 4px; }
 
-    /* ── CONTACT ── */
+    /* ═══════════════════════════════
+       CONTACT
+    ═══════════════════════════════ */
     .contact-page { min-height: calc(100vh - 56px); display: grid; grid-template-columns: 1fr 1fr; }
     .contact-left {
       background: var(--roast-orange);
@@ -355,24 +409,21 @@
     }
     .contact-left::before {
       content: ''; position: absolute;
-      top: -80px; right: -80px;
-      width: 280px; height: 280px;
+      top: -80px; right: -80px; width: 280px; height: 280px;
       border-radius: 50%; background: rgba(255,255,255,0.07);
     }
     .contact-left::after {
       content: ''; position: absolute;
-      bottom: 30px; left: -50px;
-      width: 200px; height: 200px;
+      bottom: 30px; left: -50px; width: 200px; height: 200px;
       border-radius: 50%; background: rgba(0,0,0,0.08);
     }
     .contact-eyebrow {
-      font-size: 11px; font-weight: 500;
-      letter-spacing: 0.2em; text-transform: uppercase;
-      color: rgba(255,255,255,0.7); margin-bottom: 1rem;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.2em;
+      text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 1rem;
     }
     .contact-heading {
       font-family: 'Playfair Display', serif;
-      font-size: 48px; font-weight: 900;
+      font-size: 46px; font-weight: 900;
       color: #fff; line-height: 1.1; margin-bottom: 1.5rem;
     }
     .contact-subtext {
@@ -402,11 +453,10 @@
     .contact-item {
       display: flex; align-items: center; gap: 1.25rem;
       padding: 1.25rem;
-      border: 1px solid rgba(250,246,240,0.1);
-      border-left: 3px solid var(--roast-orange);
+      border: 1px solid rgba(250,246,240,0.1); border-left: 3px solid var(--roast-orange);
       transition: border-color 0.2s;
     }
-    .contact-item:hover { border-color: rgba(250,246,240,0.2); }
+    .contact-item:hover { border-color: rgba(250,246,240,0.25); }
     .contact-icon {
       width: 42px; height: 42px; border-radius: 50%;
       background: rgba(200,64,26,0.15);
@@ -424,6 +474,111 @@
     .contact-value { font-size: 15px; color: var(--cream); }
     .contact-value a { color: var(--cream); text-decoration: none; transition: color 0.2s; }
     .contact-value a:hover { color: var(--roast-light); }
+
+    /* ═══════════════════════════════
+       TABLET — max 1024px
+    ═══════════════════════════════ */
+    @media (max-width: 1024px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-left { padding: 4rem 2.5rem; }
+      .hero-name { font-size: 44px; }
+      .hero-right { padding: 3rem 2.5rem; }
+
+      .vision-page { grid-template-columns: 1fr; }
+      .vision-left { padding: 3.5rem 2.5rem; }
+      .vision-right { padding: 3.5rem 2.5rem; }
+
+      .contact-page { grid-template-columns: 1fr; }
+      .contact-left { padding: 3.5rem 2.5rem; }
+      .contact-right { padding: 3.5rem 2.5rem; }
+
+      .exp-page { padding: 3.5rem 2.5rem; }
+      .skills-page { padding: 3.5rem 2.5rem; }
+      .certs-page { padding: 3.5rem 2.5rem; }
+
+      .certs-grid { grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+      .skills-grid { gap: 2rem; }
+    }
+
+    /* ═══════════════════════════════
+       MOBILE — max 768px
+    ═══════════════════════════════ */
+    @media (max-width: 768px) {
+      /* Nav */
+      .nav { padding: 0 1.25rem; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .mobile-menu { display: flex; }
+
+      /* Hero */
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-left { padding: 3rem 1.5rem; }
+      .hero-name { font-size: 38px; }
+      .hero-title { font-size: 14px; max-width: 100%; }
+      .hero-right { padding: 2.5rem 1.5rem; gap: 1.5rem; }
+      .stat-row { gap: 0.75rem; }
+      .stat-num { font-size: 28px; }
+
+      /* Page header */
+      .page-header { margin-bottom: 2rem; padding-bottom: 1rem; }
+      .page-title { font-size: 30px; }
+
+      /* Experience */
+      .exp-page { padding: 3rem 1.5rem; min-height: auto; }
+      .exp-item { grid-template-columns: 28px 1fr; gap: 1rem; }
+      .timeline::before { left: 12px; }
+      .exp-dot { width: 12px; height: 12px; }
+      .exp-role { font-size: 17px; }
+      .exp-date { font-size: 10px; }
+      .exp-card { padding: 1.25rem; }
+
+      /* Skills */
+      .skills-page { padding: 3rem 1.5rem; min-height: auto; }
+      .skills-grid { grid-template-columns: 1fr; gap: 1.75rem; }
+
+      /* Certs */
+      .certs-page { padding: 3rem 1.5rem; min-height: auto; }
+      .certs-grid { grid-template-columns: 1fr; gap: 1rem; }
+      .cert-card { overflow: hidden; }
+      /* On mobile, show cert preview as always-visible strip below card instead of hover popup */
+      .cert-preview {
+        display: block !important;
+        position: static !important;
+        transform: none !important;
+        width: 100% !important;
+        box-shadow: none !important;
+        border: none !important;
+        border-top: 1px solid rgba(26,26,26,0.08) !important;
+        margin-top: 1rem;
+      }
+      .cert-preview-inner { padding: 1rem; }
+
+      /* Vision */
+      .vision-page { grid-template-columns: 1fr; min-height: auto; }
+      .vision-left { padding: 3rem 1.5rem; }
+      .vision-right { padding: 3rem 1.5rem; gap: 1.25rem; }
+      .vision-quote { font-size: 22px; }
+      .vision-right-title { font-size: 22px; }
+
+      /* Contact */
+      .contact-page { grid-template-columns: 1fr; min-height: auto; }
+      .contact-left { padding: 3rem 1.5rem; }
+      .contact-heading { font-size: 36px; }
+      .contact-subtext { font-size: 13px; max-width: 100%; }
+      .contact-right { padding: 3rem 1.5rem; gap: 1.25rem; }
+      .contact-value { font-size: 14px; }
+    }
+
+    /* ═══════════════════════════════
+       SMALL MOBILE — max 420px
+    ═══════════════════════════════ */
+    @media (max-width: 420px) {
+      .hero-name { font-size: 32px; }
+      .stat-num { font-size: 24px; }
+      .page-title { font-size: 26px; }
+      .hero-cta { font-size: 11px; padding: 11px 20px; }
+      .contact-heading { font-size: 30px; }
+    }
   </style>
 </head>
 <body>
@@ -431,6 +586,8 @@
   <!-- NAV -->
   <nav class="nav">
     <div class="nav-logo">David Omondi</div>
+
+    <!-- Desktop links -->
     <div class="nav-links">
       <button class="nav-btn active" onclick="showPage('hero',this)">About</button>
       <button class="nav-btn" onclick="showPage('exp',this)">Experience</button>
@@ -439,16 +596,31 @@
       <button class="nav-btn" onclick="showPage('vision',this)">Vision</button>
       <button class="nav-btn" onclick="showPage('contact',this)">Contact</button>
     </div>
+
+    <!-- Hamburger -->
+    <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
-  <!-- PAGE: HERO -->
+  <!-- Mobile drawer -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-nav-btn active" onclick="showPage('hero', null, true)">About</button>
+    <button class="mobile-nav-btn" onclick="showPage('exp', null, true)">Experience</button>
+    <button class="mobile-nav-btn" onclick="showPage('skills', null, true)">Skills</button>
+    <button class="mobile-nav-btn" onclick="showPage('certs', null, true)">Certifications</button>
+    <button class="mobile-nav-btn" onclick="showPage('vision', null, true)">Vision</button>
+    <button class="mobile-nav-btn" onclick="showPage('contact', null, true)">Contact</button>
+  </div>
+
+  <!-- ═══ PAGE: HERO ═══ -->
   <div id="page-hero" class="page active">
     <div class="hero">
       <div class="hero-left">
         <p class="hero-eyebrow">Specialty Coffee Roaster</p>
         <h1 class="hero-name">David<br>Omondi<br>Odhiambo</h1>
         <p class="hero-title">Combining scientific precision with deep respect for the craft and art of flavor development.</p>
-        <button class="hero-cta" onclick="showPage('contact', document.querySelectorAll('.nav-btn')[5])">Book a Consultation →</button>
+        <button class="hero-cta" onclick="showPage('contact', null, false)">Book a Consultation →</button>
       </div>
       <div class="hero-right">
         <div class="location-tag"><span class="dot"></span> Doha, Qatar</div>
@@ -458,12 +630,12 @@
           <div class="stat-card"><div class="stat-num">4</div><div class="stat-label">Countries</div></div>
           <div class="stat-card"><div class="stat-num">3</div><div class="stat-label">SCA Certs</div></div>
         </div>
-        <p class="hero-bio">My passion for understanding coffee on a deeper level is what led me into the world of roasting. I bring a unique approach by combining scientific precision with deep respect for the craft from green bean selection all the way to the finished cup.</p>
+        <p class="hero-bio">My passion for understanding coffee on a deeper level is what led me into the world of roasting. I bring a unique approach by combining scientific precision with deep respect for the craft — from green bean selection all the way to the finished cup.</p>
       </div>
     </div>
   </div>
 
-  <!-- PAGE: EXPERIENCE -->
+  <!-- ═══ PAGE: EXPERIENCE ═══ -->
   <div id="page-exp" class="page">
     <div class="exp-page">
       <div class="page-header">
@@ -538,7 +710,7 @@
     </div>
   </div>
 
-  <!-- PAGE: SKILLS -->
+  <!-- ═══ PAGE: SKILLS ═══ -->
   <div id="page-skills" class="page">
     <div class="skills-page">
       <div class="page-header" style="border-bottom-color:rgba(250,246,240,0.1)">
@@ -590,7 +762,7 @@
     </div>
   </div>
 
-  <!-- PAGE: CERTIFICATIONS -->
+  <!-- ═══ PAGE: CERTIFICATIONS ═══ -->
   <div id="page-certs" class="page">
     <div class="certs-page">
       <div class="page-header">
@@ -663,7 +835,7 @@
     </div>
   </div>
 
-  <!-- PAGE: VISION -->
+  <!-- ═══ PAGE: VISION ═══ -->
   <div id="page-vision" class="page">
     <div class="vision-page">
       <div class="vision-left">
@@ -674,7 +846,7 @@
         <h3 class="vision-right-title">Where I'm Headed</h3>
         <div class="vision-item">
           <div class="vision-num">01</div>
-          <div class="vision-text"><strong>Specialty Brand Launch</strong>Launch my own specialty coffee brand built on transparent sourcing, precision roasting, and a unique African perspective on flavor.</div>
+          <div class="vision-text"><strong>Specialty Brand Launch</strong>Launch my own specialty coffee brand — built on transparent sourcing, precision roasting, and a unique African perspective on flavor.</div>
         </div>
         <div class="vision-item">
           <div class="vision-num">02</div>
@@ -688,13 +860,13 @@
     </div>
   </div>
 
-  <!-- PAGE: CONTACT -->
+  <!-- ═══ PAGE: CONTACT ═══ -->
   <div id="page-contact" class="page">
     <div class="contact-page">
       <div class="contact-left">
         <p class="contact-eyebrow">Available for Consultations</p>
         <h2 class="contact-heading">Let's Talk<br>Coffee.</h2>
-        <p class="contact-subtext">Whether you're building a roastery, training a team, developing a roast profile, or launching a coffee brand, David brings 13+ years of hands-on specialty coffee expertise to every consultation.</p>
+        <p class="contact-subtext">Whether you're building a roastery, training a team, developing a roast profile, or launching a coffee brand — David brings 13+ years of hands-on specialty coffee expertise to every consultation.</p>
         <div class="consult-tags">
           <span class="consult-tag">Roast Profiling</span>
           <span class="consult-tag">Green Bean Sourcing</span>
@@ -739,11 +911,51 @@
   </div>
 
   <script>
-    function showPage(id, btn) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const pages = ['hero','exp','skills','certs','vision','contact'];
+
+    function showPage(id, btn, fromMobile) {
+      // Hide all pages
+      pages.forEach(p => document.getElementById('page-' + p).classList.remove('active'));
+
+      // Deactivate all desktop nav buttons
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+      // Deactivate all mobile nav buttons
+      document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
+
+      // Show selected page
       document.getElementById('page-' + id).classList.add('active');
-      if (btn) btn.classList.add('active');
+
+      // Activate correct desktop button
+      const idx = pages.indexOf(id);
+      const desktopBtns = document.querySelectorAll('.nav-btn');
+      if (desktopBtns[idx]) desktopBtns[idx].classList.add('active');
+
+      // Activate correct mobile button
+      const mobileBtns = document.querySelectorAll('.mobile-nav-btn');
+      if (mobileBtns[idx]) mobileBtns[idx].classList.add('active');
+
+      // Close mobile menu if navigating from it
+      if (fromMobile) closeMenu();
+
+      // Scroll to top
+      window.scrollTo(0, 0);
+    }
+
+    function toggleMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const ham = document.getElementById('hamburger');
+      menu.classList.toggle('open');
+      ham.classList.toggle('open');
+      document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+    }
+
+    function closeMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const ham = document.getElementById('hamburger');
+      menu.classList.remove('open');
+      ham.classList.remove('open');
+      document.body.style.overflow = '';
     }
   </script>
 </body>
