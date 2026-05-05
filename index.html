@@ -307,35 +307,18 @@
     .cert-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,0.12); }
     .cert-card.purple { border-top-color: var(--barista-purple); }
 
-    .cert-preview {
-      display: none; position: absolute;
-      bottom: calc(100% + 14px); left: 50%; transform: translateX(-50%);
-      width: 290px; background: #fff;
-      border: 1px solid rgba(26,26,26,0.14);
-      box-shadow: 0 16px 48px rgba(0,0,0,0.2);
-      z-index: 300; text-align: left;
+    .cert-pdf-wrapper {
+      width: 100%; height: 220px;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(26,26,26,0.1);
+      background: #f9f9f9;
+      position: relative; overflow: hidden;
+      border-radius: 4px;
     }
-    .cert-card:hover .cert-preview { display: block; }
-    .cert-preview-inner { border-top: 5px solid var(--roast-orange); padding: 1.25rem; }
-    .cert-preview-inner.purple { border-top-color: var(--barista-purple); }
-    .cert-preview-logo {
-      font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--text-muted); margin-bottom: 10px;
+    .cert-pdf-wrapper iframe {
+      width: 100%; height: 100%;
+      border: none; pointer-events: auto;
     }
-    .cert-preview-sca-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 20px; font-weight: 900; line-height: 1.2;
-      color: var(--charcoal); margin-bottom: 8px;
-    }
-    .cert-preview-sub { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; }
-    .cert-preview-name { font-size: 14px; font-weight: 500; color: var(--charcoal); margin-bottom: 4px; }
-    .cert-preview-course { font-size: 13px; color: var(--roast-orange); font-weight: 500; margin-bottom: 12px; }
-    .cert-preview-course.purple { color: var(--barista-purple); }
-    .cert-preview-footer {
-      display: flex; justify-content: space-between;
-      border-top: 1px solid rgba(26,26,26,0.08); padding-top: 10px;
-    }
-    .cert-preview-footer span { font-size: 10px; color: var(--text-muted); }
 
     .cert-badge {
       width: 58px; height: 58px; border-radius: 50%;
@@ -540,18 +523,8 @@
       .certs-page { padding: 3rem 1.5rem; min-height: auto; }
       .certs-grid { grid-template-columns: 1fr; gap: 1rem; }
       .cert-card { overflow: hidden; }
-      /* On mobile, show cert preview as always-visible strip below card instead of hover popup */
-      .cert-preview {
-        display: block !important;
-        position: static !important;
-        transform: none !important;
-        width: 100% !important;
-        box-shadow: none !important;
-        border: none !important;
-        border-top: 1px solid rgba(26,26,26,0.08) !important;
-        margin-top: 1rem;
-      }
-      .cert-preview-inner { padding: 1rem; }
+      /* Mobile wrapper updates */
+      .cert-pdf-wrapper { height: 260px; }
 
       /* Vision */
       .vision-page { grid-template-columns: 1fr; min-height: auto; }
@@ -772,17 +745,8 @@
       <div class="certs-grid">
 
         <div class="cert-card">
-          <div class="cert-preview">
-            <div class="cert-preview-inner">
-              <div class="cert-preview-logo">Coffee Skills Program · SCA</div>
-              <div class="cert-preview-sca-title">The Specialty Coffee Association</div>
-              <div class="cert-preview-sub">This is to recognise that</div>
-              <div class="cert-preview-name">David Odhiambo</div>
-              <div class="cert-preview-course">CSP Roasting-Professional</div>
-              <div class="cert-preview-footer">
-                <span>Cert #820704</span><span>9/15/2025</span>
-              </div>
-            </div>
+          <div class="cert-pdf-wrapper">
+            <iframe src="Roasting professional sca certificate .pdf#toolbar=0&navpanes=0&scrollbar=1&view=FitH" frameborder="0"></iframe>
           </div>
           <div class="cert-badge">R</div>
           <div class="cert-name">Roasting Professional</div>
@@ -792,17 +756,8 @@
         </div>
 
         <div class="cert-card">
-          <div class="cert-preview">
-            <div class="cert-preview-inner">
-              <div class="cert-preview-logo">Coffee Skills Program · SCA</div>
-              <div class="cert-preview-sca-title">The Specialty Coffee Association</div>
-              <div class="cert-preview-sub">This is to recognise that</div>
-              <div class="cert-preview-name">David Odhiambo</div>
-              <div class="cert-preview-course">CSP Roasting-Intermediate</div>
-              <div class="cert-preview-footer">
-                <span>Cert #757159</span><span>4/10/2025</span>
-              </div>
-            </div>
+          <div class="cert-pdf-wrapper">
+            <iframe src="Roasting Intermediate sca cert .pdf#toolbar=0&navpanes=0&scrollbar=1&view=FitH" frameborder="0"></iframe>
           </div>
           <div class="cert-badge">R</div>
           <div class="cert-name">Roasting Intermediate</div>
@@ -812,17 +767,8 @@
         </div>
 
         <div class="cert-card purple">
-          <div class="cert-preview">
-            <div class="cert-preview-inner purple">
-              <div class="cert-preview-logo">Coffee Skills Program · SCA</div>
-              <div class="cert-preview-sca-title">The Specialty Coffee Association</div>
-              <div class="cert-preview-sub">This is to recognise that</div>
-              <div class="cert-preview-name">David Odhiambo</div>
-              <div class="cert-preview-course purple">CSP Barista Skills-Intermediate</div>
-              <div class="cert-preview-footer">
-                <span>Cert #557285</span><span>20 Sep 2022</span>
-              </div>
-            </div>
+          <div class="cert-pdf-wrapper">
+            <iframe src="Barista intermediate sca cert .pdf#toolbar=0&navpanes=0&scrollbar=1&view=FitH" frameborder="0"></iframe>
           </div>
           <div class="cert-badge purple">B</div>
           <div class="cert-name">Barista Skills Intermediate</div>
