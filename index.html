@@ -297,42 +297,165 @@
     }
     .certs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem; }
 
+    /* ── Premium Card ── */
     .cert-card {
-      background: #fff; border: 1px solid rgba(26,26,26,0.08);
+      background: #fff;
+      border: 1px solid rgba(26,26,26,0.08);
       border-top: 4px solid var(--roast-orange);
-      padding: 2rem 1.5rem; text-align: center;
-      position: relative; overflow: visible;
-      transition: transform 0.2s, box-shadow 0.2s; cursor: default;
-    }
-    .cert-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,0.12); }
-    .cert-card.purple { border-top-color: var(--barista-purple); }
-
-    .cert-pdf-wrapper {
-      width: 100%; height: 220px;
-      margin-bottom: 1.5rem;
-      border: 1px solid rgba(26,26,26,0.1);
-      background: #f9f9f9;
+      padding: 2.25rem 1.75rem 2rem;
+      text-align: center;
       position: relative; overflow: hidden;
-      border-radius: 4px;
+      cursor: pointer;
+      transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1),
+                  box-shadow 0.28s ease,
+                  border-color 0.2s ease;
     }
-    .cert-pdf-wrapper iframe {
-      width: 100%; height: 100%;
-      border: none; pointer-events: auto;
+    .cert-card::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(200,64,26,0.04) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.3s;
+      pointer-events: none;
     }
+    .cert-card:hover { transform: translateY(-7px); box-shadow: 0 20px 50px rgba(200,64,26,0.14); }
+    .cert-card:hover::after { opacity: 1; }
+    .cert-card.purple { border-top-color: var(--barista-purple); }
+    .cert-card.purple::after { background: linear-gradient(135deg, rgba(123,63,140,0.05) 0%, transparent 60%); }
+    .cert-card.purple:hover { box-shadow: 0 20px 50px rgba(123,63,140,0.14); }
+
+    /* Hover reveal "View Certificate" label */
+    .cert-card-hover-hint {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: var(--roast-orange);
+      color: #fff; font-size: 10px; font-weight: 500;
+      letter-spacing: 0.13em; text-transform: uppercase;
+      padding: 8px 0;
+      transform: translateY(100%);
+      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+      pointer-events: none;
+    }
+    .cert-card.purple .cert-card-hover-hint { background: var(--barista-purple); }
+    .cert-card:hover .cert-card-hover-hint { transform: translateY(0); }
 
     .cert-badge {
-      width: 58px; height: 58px; border-radius: 50%;
+      width: 62px; height: 62px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 1rem;
+      margin: 0 auto 1.1rem;
       background: rgba(200,64,26,0.1); color: var(--roast-orange);
-      font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700;
+      font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700;
+      transition: background 0.25s, transform 0.25s;
     }
+    .cert-card:hover .cert-badge { background: rgba(200,64,26,0.18); transform: scale(1.08); }
     .cert-badge.purple { background: rgba(123,63,140,0.1); color: var(--barista-purple); }
-    .cert-name { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .cert-card.purple:hover .cert-badge { background: rgba(123,63,140,0.18); }
+
+    .cert-name { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; margin-bottom: 6px; line-height: 1.35; }
     .cert-org { font-size: 11px; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
     .cert-num { font-size: 11px; color: var(--roast-orange); font-family: monospace; }
     .cert-num.purple { color: var(--barista-purple); }
     .cert-date { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+    /* ── Modal Overlay ── */
+    .cert-modal-overlay {
+      position: fixed; inset: 0; z-index: 9000;
+      background: rgba(10, 8, 6, 0.78);
+      backdrop-filter: blur(6px) saturate(0.7);
+      -webkit-backdrop-filter: blur(6px) saturate(0.7);
+      display: flex; align-items: center; justify-content: center;
+      padding: 1.5rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .cert-modal-overlay.active {
+      opacity: 1; pointer-events: all;
+    }
+
+    /* ── Modal Box ── */
+    .cert-modal {
+      background: #fff;
+      width: 100%; max-width: 480px;
+      position: relative;
+      transform: translateY(22px) scale(0.97);
+      transition: transform 0.35s cubic-bezier(0.34,1.38,0.64,1);
+      overflow: hidden;
+    }
+    .cert-modal-overlay.active .cert-modal {
+      transform: translateY(0) scale(1);
+    }
+
+    /* Accent strip */
+    .cert-modal-strip {
+      height: 5px;
+      background: linear-gradient(90deg, var(--roast-orange), var(--roast-light));
+    }
+    .cert-modal-strip.purple {
+      background: linear-gradient(90deg, var(--barista-purple), #a055b5);
+    }
+
+    /* Close button */
+    .cert-modal-close {
+      position: absolute; top: 14px; right: 14px;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(26,26,26,0.07); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, transform 0.2s; color: var(--charcoal);
+    }
+    .cert-modal-close:hover { background: rgba(200,64,26,0.12); transform: rotate(90deg); }
+    .cert-modal-close svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; }
+
+    /* Modal inner content */
+    .cert-modal-body { padding: 2.25rem 2.25rem 2rem; }
+
+    .cert-modal-badge {
+      width: 68px; height: 68px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.5rem;
+      background: rgba(200,64,26,0.1); color: var(--roast-orange);
+      font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700;
+    }
+    .cert-modal-badge.purple { background: rgba(123,63,140,0.1); color: var(--barista-purple); }
+
+    .cert-modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-weight: 700; text-align: center;
+      color: var(--charcoal); line-height: 1.3; margin-bottom: 4px;
+    }
+    .cert-modal-org {
+      font-size: 11px; color: var(--text-muted);
+      letter-spacing: 0.12em; text-transform: uppercase;
+      text-align: center; margin-bottom: 1.75rem;
+    }
+
+    .cert-modal-divider { height: 1px; background: rgba(26,26,26,0.08); margin-bottom: 1.5rem; }
+
+    .cert-modal-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.5rem; margin-bottom: 1.75rem; }
+    .cert-modal-field { }
+    .cert-modal-field-label {
+      font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: rgba(107,91,78,0.6); margin-bottom: 3px;
+    }
+    .cert-modal-field-value {
+      font-size: 13px; color: var(--charcoal); font-weight: 500; line-height: 1.4;
+    }
+    .cert-modal-field-value.mono { font-family: monospace; font-size: 12px; color: var(--roast-orange); }
+    .cert-modal-field-value.mono.purple { color: var(--barista-purple); }
+
+    /* PDF button */
+    .cert-modal-pdf-btn {
+      display: flex; align-items: center; justify-content: center; gap: 9px;
+      width: 100%; padding: 14px;
+      background: var(--roast-orange);
+      border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+      color: #fff;
+      transition: background 0.2s, transform 0.15s;
+      text-decoration: none;
+    }
+    .cert-modal-pdf-btn:hover { background: var(--roast-dark); transform: translateY(-1px); }
+    .cert-modal-pdf-btn.purple { background: var(--barista-purple); }
+    .cert-modal-pdf-btn.purple:hover { background: #5d2e6e; }
+    .cert-modal-pdf-btn svg { width: 15px; height: 15px; stroke: #fff; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; fill: none; }
 
     /* ═══════════════════════════════
        VISION
@@ -522,8 +645,9 @@
       /* Certs */
       .certs-page { padding: 3rem 1.5rem; min-height: auto; }
       .certs-grid { grid-template-columns: 1fr; gap: 1rem; }
-      /* Mobile wrapper updates */
-      .cert-pdf-wrapper { height: 260px; }
+      .cert-modal { max-width: 100%; }
+      .cert-modal-meta { grid-template-columns: 1fr; gap: 0.85rem; }
+      .cert-modal-body { padding: 1.75rem 1.5rem 1.5rem; }
 
       /* Vision */
       .vision-page { grid-template-columns: 1fr; min-height: auto; }
@@ -741,42 +865,30 @@
         <h2 class="page-title">Certifications</h2>
         <span class="page-accent">SCA Certified</span>
       </div>
-      <div class="certs-grid">
-
-        <div class="cert-card">
-          <div class="cert-pdf-wrapper">
-            <iframe src="Roasting professional sca certificate .pdf#toolbar=0&navpanes=0&scrollbar=1&view=FitH" frameborder="0"></iframe>
-          </div>
-          <div class="cert-badge">R</div>
-          <div class="cert-name">Roasting Professional</div>
-          <div class="cert-org">Specialty Coffee Association</div>
-          <div class="cert-num">#820704</div>
-          <div class="cert-date">September 2025</div>
-        </div>
-
-        <div class="cert-card">
-          <div class="cert-pdf-wrapper">
-            <iframe src="Roasting Intermediate sca cert .pdf#toolbar=0&navpanes=0&scrollbar=1&view=FitH" frameborder="0"></iframe>
-          </div>
-          <div class="cert-badge">R</div>
-          <div class="cert-name">Roasting Intermediate</div>
-          <div class="cert-org">Specialty Coffee Association</div>
-          <div class="cert-num">#757159</div>
-          <div class="cert-date">April 2025</div>
-        </div>
-
-        <div class="cert-card purple">
-          <div class="cert-pdf-wrapper">
-            <iframe src="Barista intermediate sca cert .pdf#toolbar=0&navpanes=0&scrollbar=1&view=FitH" frameborder="0"></iframe>
-          </div>
-          <div class="cert-badge purple">B</div>
-          <div class="cert-name">Barista Skills Intermediate</div>
-          <div class="cert-org">Specialty Coffee Association</div>
-          <div class="cert-num purple">#557285</div>
-          <div class="cert-date">September 2022</div>
-        </div>
-
+      <div class="certs-grid" id="certsGrid">
+        <!-- Cards injected by JS -->
       </div>
+    </div>
+  </div>
+
+  <!-- ═══ CERT MODAL ═══ -->
+  <div class="cert-modal-overlay" id="certModalOverlay" role="dialog" aria-modal="true" aria-labelledby="certModalTitle">
+    <div class="cert-modal" id="certModal">
+      <div class="cert-modal-strip" id="certModalStrip"></div>
+      <button class="cert-modal-close" id="certModalClose" aria-label="Close">
+        <svg viewBox="0 0 14 14" fill="none"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
+      </button>
+      <div class="cert-modal-body">
+        <div class="cert-modal-badge" id="certModalBadge"></div>
+        <div class="cert-modal-title" id="certModalTitle"></div>
+        <div class="cert-modal-org" id="certModalOrg"></div>
+        <div class="cert-modal-divider"></div>
+        <div class="cert-modal-meta" id="certModalMeta"></div>
+      </div>
+      <a class="cert-modal-pdf-btn" id="certModalPdfBtn">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+        View Certificate PDF
+      </a>
     </div>
   </div>
 
@@ -857,34 +969,160 @@
   </div>
 
   <script>
+    /* ═══════════════════════════════════════════════
+       CERTIFICATION DATA
+       Store all cert info here — easy to update/add.
+    ═══════════════════════════════════════════════ */
+    const CERTIFICATIONS = [
+      {
+        id: 'roasting-pro',
+        badge: 'R',
+        variant: '',               // '' = orange, 'purple' = purple
+        name: 'Roasting Professional',
+        institution: 'Specialty Coffee Association',
+        certNumber: '#820704',
+        issueDate: 'September 2025',
+        trainer: null,
+        pdfFile: 'Roasting professional sca certificate .pdf'
+      },
+      {
+        id: 'roasting-int',
+        badge: 'R',
+        variant: '',
+        name: 'Roasting Intermediate',
+        institution: 'Specialty Coffee Association',
+        certNumber: '#757159',
+        issueDate: 'April 2025',
+        trainer: null,
+        pdfFile: 'Roasting Intermediate sca cert .pdf'
+      },
+      {
+        id: 'barista-int',
+        badge: 'B',
+        variant: 'purple',
+        name: 'Barista Skills Intermediate',
+        institution: 'Specialty Coffee Association',
+        certNumber: '#557285',
+        issueDate: 'September 2022',
+        trainer: null,
+        pdfFile: 'Barista intermediate sca cert .pdf'
+      }
+    ];
+
+    /* ═══════════════════════════════════════════════
+       BUILD CERTIFICATION CARDS
+    ═══════════════════════════════════════════════ */
+    function buildCertCards() {
+      const grid = document.getElementById('certsGrid');
+      grid.innerHTML = CERTIFICATIONS.map((cert, i) => `
+        <div class="cert-card ${cert.variant}" role="button" tabindex="0"
+             aria-label="View ${cert.name} certificate details"
+             data-cert-id="${cert.id}"
+             onclick="openCertModal(${i})"
+             onkeydown="if(event.key==='Enter'||event.key===' ')openCertModal(${i})">
+          <div class="cert-badge ${cert.variant}">${cert.badge}</div>
+          <div class="cert-name">${cert.name}</div>
+          <div class="cert-org">${cert.institution}</div>
+          <div class="cert-num ${cert.variant}">${cert.certNumber}</div>
+          <div class="cert-date">${cert.issueDate}</div>
+          <div class="cert-card-hover-hint">View Certificate ↗</div>
+        </div>
+      `).join('');
+    }
+    buildCertCards();
+
+    /* ═══════════════════════════════════════════════
+       MODAL LOGIC
+    ═══════════════════════════════════════════════ */
+    const overlay   = document.getElementById('certModalOverlay');
+    const strip     = document.getElementById('certModalStrip');
+    const badge     = document.getElementById('certModalBadge');
+    const titleEl   = document.getElementById('certModalTitle');
+    const orgEl     = document.getElementById('certModalOrg');
+    const metaEl    = document.getElementById('certModalMeta');
+    const pdfBtn    = document.getElementById('certModalPdfBtn');
+    const closeBtn  = document.getElementById('certModalClose');
+
+    function openCertModal(index) {
+      const cert = CERTIFICATIONS[index];
+      const isPurple = cert.variant === 'purple';
+
+      // Strip colour
+      strip.className = 'cert-modal-strip' + (isPurple ? ' purple' : '');
+
+      // Badge
+      badge.textContent = cert.badge;
+      badge.className = 'cert-modal-badge' + (isPurple ? ' purple' : '');
+
+      // Title & org
+      titleEl.textContent = cert.name;
+      orgEl.textContent = cert.institution;
+
+      // Meta fields
+      const fields = [
+        { label: 'Certificate No.', value: cert.certNumber, mono: true, purple: isPurple },
+        { label: 'Issue Date',       value: cert.issueDate,  mono: false },
+      ];
+      if (cert.trainer) {
+        fields.push({ label: 'Trainer', value: cert.trainer, mono: false });
+      }
+
+      metaEl.innerHTML = fields.map(f => `
+        <div class="cert-modal-field">
+          <div class="cert-modal-field-label">${f.label}</div>
+          <div class="cert-modal-field-value${f.mono ? ' mono' + (f.purple ? ' purple' : '') : ''}">${f.value}</div>
+        </div>
+      `).join('');
+
+      // PDF button
+      if (cert.pdfFile) {
+        pdfBtn.href = cert.pdfFile;
+        pdfBtn.className = 'cert-modal-pdf-btn' + (isPurple ? ' purple' : '');
+        pdfBtn.style.display = 'flex';
+      } else {
+        pdfBtn.style.display = 'none';
+      }
+
+      // Open
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    }
+
+    function closeCertModal() {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Close button
+    closeBtn.addEventListener('click', closeCertModal);
+
+    // Click outside modal box
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeCertModal();
+    });
+
+    // Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && overlay.classList.contains('active')) closeCertModal();
+    });
+
+    /* ═══════════════════════════════════════════════
+       NAV + PAGE SWITCHING (unchanged)
+    ═══════════════════════════════════════════════ */
     const pages = ['hero','exp','skills','certs','vision','contact'];
 
     function showPage(id, btn, fromMobile) {
-      // Hide all pages
       pages.forEach(p => document.getElementById('page-' + p).classList.remove('active'));
-
-      // Deactivate all desktop nav buttons
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-
-      // Deactivate all mobile nav buttons
       document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
-
-      // Show selected page
       document.getElementById('page-' + id).classList.add('active');
-
-      // Activate correct desktop button
       const idx = pages.indexOf(id);
       const desktopBtns = document.querySelectorAll('.nav-btn');
       if (desktopBtns[idx]) desktopBtns[idx].classList.add('active');
-
-      // Activate correct mobile button
       const mobileBtns = document.querySelectorAll('.mobile-nav-btn');
       if (mobileBtns[idx]) mobileBtns[idx].classList.add('active');
-
-      // Close mobile menu if navigating from it
       if (fromMobile) closeMenu();
-
-      // Scroll to top
       window.scrollTo(0, 0);
     }
 
